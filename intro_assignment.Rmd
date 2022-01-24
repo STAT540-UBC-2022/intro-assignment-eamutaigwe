@@ -37,7 +37,7 @@ When answering the following questions, please always "sandwich" your R code wit
 Now we want to find the sum of x and y.
 
 ```{r example_R}
-x <- 1  # Note how I assign them to variables instead of just priting 1+2
+x <- 1  # Note how I assign them to variables instead of just writing 1+2
 y <- 2 
 z <- x + y
 z # By doing this, I can print out the output of z. Alternately, you can also do (z <- x+y). 
@@ -62,9 +62,24 @@ Convert the array into a data frame by using `data.frame()` function.
 
 Find the answers these questions by adding code to the code block below. 
 
+**First, we will convert the array into a data frame**
+
 ```{r}
-# YOUR CODE HERE
+titanic <- data.frame(Titanic)
 ```
+The data frame has `r ncol(titanic)` variables and `r nrow(titanic)` observations. 
+
+
+**Next, we will determine the number of children and adults**
+```{r}
+library(tidyverse) # This package contains functions we will use to answer this question
+titanic %>% # Pipe the data set into the function
+  select(Age, Freq) %>% # Select the columns (variables) of interest
+  group_by(Age) %>% # Group by Age
+  summarize(sum(Freq))
+```
+
+
 
 Replace this text with an explanation of your code output to answer the questions. 
 
