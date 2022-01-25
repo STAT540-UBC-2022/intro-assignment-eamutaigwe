@@ -106,11 +106,11 @@ Find the answers these questions by adding code to the code block below.
 
 ```{r}
 (survival <- titanic %>% 
-  select(Age, Survived, Freq) %>% # To answer the question, select the relevant variables
-  group_by(Age, Survived) %>% # Group by Age and Survived
-  summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by Age
-  mutate(total_passengers_by_age = sum(survival_by_category)) %>% # Find the total under each Age group
-  mutate(survival_rate = survival_by_category/total_passengers_by_age * 100))
+    select(Age, Survived, Freq) %>% # To answer the question, select the relevant variables
+    group_by(Age, Survived) %>% # Group by Age and Survived
+    summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by Age
+    mutate(total_passengers_by_age = sum(survival_by_category)) %>% # Find the total under each Age group
+    mutate(survival_rate = survival_by_category/total_passengers_by_age * 100)) # Determine survival rate by age
 ```
 The result shows that `57 (52%)` of the children survived whereas `654 (31%)` of the adults survived. Therefore, the children had better survival rate than adults.
 
@@ -118,9 +118,19 @@ The result shows that `57 (52%)` of the children survived whereas `654 (31%)` of
 **We will now determine the class of passengers with better survival rate**
 
 ```{r}
-
+(survival <- titanic %>% 
+    select(Class, Survived, Freq) %>% # To answer the question, select the relevant variables
+    group_by(Class, Survived) %>% # Group by class and survival
+    summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by class
+    mutate(total_passengers_by_class = sum(survival_by_category)) %>% # Find the total under each Age group
+    mutate(survival_rate = survival_by_category/total_passengers_by_class * 100))
 ```
+1. Out of 325 first class passengers, 203 **(62%)** survived 
+2. Out of 285 second class passengers, 118 **(41%)** survived 
+3. Out of 706 third class passengers, 178 **(25%)** survived
+4. Out of 885 crew members, 212 **(23%)** survived.
 
+**Therefore, first class passengers had the highest survival rate.**
 
 
 ## 3. Data visualization (1.5pt)
