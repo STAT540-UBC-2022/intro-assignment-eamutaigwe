@@ -72,16 +72,25 @@ The data frame has `r ncol(titanic)` variables and `r nrow(titanic)` observation
 
 **Next, we will determine the number of children and adults**
 ```{r}
-library(tidyverse) # This package contains functions we will use to answer this question
-titanic %>% # Pipe the data set into the function
+suppressMessages(library(tidyverse)) # This package contains functions we will use to answer this question
+(child_adult <- titanic %>% # Pipe the data set into the function
   select(Age, Freq) %>% # Select the columns (variables) of interest
   group_by(Age) %>% # Group by Age
-  summarize(sum(Freq))
+  summarize(freq = sum(Freq)))
 ```
+From the analysis, `109 children` and `2092 adults` were on the Titanic.
 
 
+**Let us now find out if there were more female or male adult passengers**
 
-Replace this text with an explanation of your code output to answer the questions. 
+```{r}
+(adult_male_female <- titanic %>% # Pipe the titanic data into the function
+  filter(Age == "Adult") %>% # Filter the data to only Adult passengers
+  group_by(Sex) %>% # Group Adult passengers by Sex
+  summarize(n = sum(Freq))) # Summarize the frequency of each group
+```
+The analsis above shows that there were far `more male adult passengers (1667)` than `female adult passengers (425)`.
+
 
 ### 2.2 Survival 
 
@@ -93,11 +102,25 @@ Using the same data frame, examine the survival rates.
 
 Find the answers these questions by adding code to the code block below. 
 
+**We will go ahead and find out the survival rates between children and adults to be able to answer the question**
+
 ```{r}
-# YOUR CODE HERE
+(survival <- titanic %>% 
+  select(Age, Survived, Freq) %>% # To answer the question, select the relevant variables
+  group_by(Age, Survived) %>% # Group by Age and Survived
+  summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by Age
+  mutate(total_passengers_by_age = sum(survival_by_category)) %>% # Find the total under each Age group
+  mutate(survival_rate = survival_by_category/total_passengers_by_age * 100))
+```
+The result shows that `57 (52%)` of the children survived whereas `654 (31%)` of the adults survived. Therefore, the children had better survival rate than adults.
+
+
+**We will now determine the class of passengers with better survival rate**
+
+```{r}
+
 ```
 
-Replace this text with an explanation of your code output to answer the questions. 
 
 
 ## 3. Data visualization (1.5pt)
