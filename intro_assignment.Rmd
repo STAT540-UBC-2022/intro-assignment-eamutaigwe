@@ -159,21 +159,23 @@ We can see that there are `r ncol(pig_tooth_growth)` and `r nrow(pig_tooth_growt
 
 
 **Let us see if increase in dosage and supplement type (VC or OJ) resulted in higher length of odontoblasts(cells responsible for tooth growth)** 
+
 *So, the length of odontoblasts translates to  tooth growth*
 
+We will use a scatterplot to visualize the data
+
 ```{r}
-pig_tooth_growth %>% 
-  ggplot(aes(dose, len, color = supp)) +
-  geom_jitter(width = 0.1) +
-  theme_bw() +
-  labs(title = "Effect of Vit. C Dosage and Source on Tooth Growth",
-  x = "Dose of Vitamin C",
-  y = "Length of odontoblasts",
-  color = "Source of Vit. C")
+pig_tooth_growth %>% # Pipe the data into the ggplot function
+    ggplot(aes(dose, len, color = supp)) + # Map the variables to aesthetics
+    geom_jitter(width = 0.1) + # A little jitter to avoid over-plotting
+    theme_bw() + # Reduce the background
+    labs(title = "Effect of Vit. C Dosage and Source on Tooth Growth",
+          x = "Dose of Vitamin C",
+          y = "Length of odontoblasts (tooth growth)",
+          color = "Source of Vit. C") # Give informative labels to the plot
 ```
 
-
-Replace this text with an explanation of your code output to answer the question. 
+This graph is very informative. It shows that there was an increase in tooth growth as the dosage of vitamin C increased. It also shows that especially at doses 0.5 and 1.0, OJ(orange juice produced more tooth growth) than VC(ascorbic acid). I chose to present the data in this way because it gives me information on individual pigs.
 
 
 ## 4. Mechanics (0.5pt)
