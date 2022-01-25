@@ -4,8 +4,7 @@
 
 My name is **Ekpereka Amutaigwe**. I am a Master's student in the Genome Science and 
 Technology program. I'm a Nigerian female :nigeria:. I love reading :book: and singing :musical_note:
-My LinkedIn profile can be found in this link-[Ekpereka Amutaigwe]
-(https://www.linkedin.com/in/ekpereka-amutaigwe-1408b4128/)
+My LinkedIn profile can be found in this link-[Ekpereka Amutaigwe](https://www.linkedin.com/in/ekpereka-amutaigwe-1408b4128/)
 
 ### MSc Thesis project
 
