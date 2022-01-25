@@ -61,7 +61,7 @@ what x + y given x=1 and y=2, you can answer it like this:
 Now we want to find the sum of x and y.
 
 ``` r
-x <- 1  # Note how I assign them to variables instead of just priting 1+2
+x <- 1  # Note how I assign them to variables instead of just writing 1+2
 y <- 2 
 z <- x + y
 z # By doing this, I can print out the output of z. Alternately, you can also do (z <- x+y). 
@@ -105,12 +105,60 @@ Convert the array into a data frame by using `data.frame()` function.
 
 Find the answers these questions by adding code to the code block below.
 
+#### 2.1.1 Load package and convert data to data frame
+
+**First, we will load the required package for the functions needed and
+convert the array into a data frame**
+
 ``` r
-# YOUR CODE HERE
+suppressMessages(library(tidyverse)) # This package contains functions we will use to answer the questions
+
+titanic <- data.frame(Titanic)
 ```
 
-Replace this text with an explanation of your code output to answer the
-questions.
+The data frame has **5 variables** and **32 observations**.
+
+#### 2.1.2 Determine number of children and adults
+
+**Next, we will determine the number of children and adults**
+
+``` r
+(child_adult <- titanic %>% # Pipe the data set into the function
+  select(Age, Freq) %>% # Select the columns (variables) of interest
+  group_by(Age) %>% # Group by Age
+  summarize(freq = sum(Freq)))
+```
+
+    ## # A tibble: 2 × 2
+    ##   Age    freq
+    ##   <fct> <dbl>
+    ## 1 Child   109
+    ## 2 Adult  2092
+
+From the analysis, **109 children and 2092 adults** were on the Titanic.
+
+------------------------------------------------------------------------
+
+#### 2.1.3 Determine number of female and male adult passengers
+
+**Let us now find out if there were more female or male adult
+passengers**
+
+``` r
+(adult_male_female <- titanic %>% # Pipe the titanic data into the filter function
+  filter(Age == "Adult") %>% # Filter the data to only Adult passengers
+  group_by(Sex) %>% # Group Adult passengers by Sex
+  summarize(n = sum(Freq))) # Summarize the frequency of each group
+```
+
+    ## # A tibble: 2 × 2
+    ##   Sex        n
+    ##   <fct>  <dbl>
+    ## 1 Male    1667
+    ## 2 Female   425
+
+The analysis above shows that there were far **more male adult
+passengers (1667)** than **female adult passengers (425)**.
 
 ### 2.2 Survival
 
@@ -122,12 +170,70 @@ Using the same data frame, examine the survival rates.
 
 Find the answers these questions by adding code to the code block below.
 
+#### 2.2.1 Compare survival rate of children to adults
+
+**We will go ahead and find out the survival rates between children and
+adults to be able to answer the question**
+
 ``` r
-# YOUR CODE HERE
+(survival_age <- titanic %>% 
+    select(Age, Survived, Freq) %>% # To answer the question, select the relevant variables
+    group_by(Age, Survived) %>% # Group by Age and Survived
+    summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by Age
+    mutate(total_passengers_by_age = sum(survival_by_category)) %>% # Find the total under each Age group
+    mutate(survival_rate = survival_by_category/total_passengers_by_age * 100)) # Determine survival rate by age
 ```
 
-Replace this text with an explanation of your code output to answer the
-questions.
+    ## `summarise()` has grouped output by 'Age'. You can override using the `.groups` argument.
+
+    ## # A tibble: 4 × 5
+    ## # Groups:   Age [2]
+    ##   Age   Survived survival_by_category total_passengers_by_age survival_rate
+    ##   <fct> <fct>                   <dbl>                   <dbl>         <dbl>
+    ## 1 Child No                         52                     109          47.7
+    ## 2 Child Yes                        57                     109          52.3
+    ## 3 Adult No                       1438                    2092          68.7
+    ## 4 Adult Yes                       654                    2092          31.3
+
+The result shows that **57 (52%)** of the children survived whereas
+**654 (31%)** of the adults survived. **Therefore, the children had
+better survival rate than adults.**
+
+#### 2.2.2 Compare survival rate by class
+
+**We will now determine the class of passengers with better survival
+rate**
+
+``` r
+(survival_class <- titanic %>% 
+    select(Class, Survived, Freq) %>% # To answer the question, select the relevant variables
+    group_by(Class, Survived) %>% # Group by class and survival
+    summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by class
+    mutate(total_passengers_by_class = sum(survival_by_category)) %>% # Find the total under each Age group
+    mutate(survival_rate = survival_by_category/total_passengers_by_class * 100)) # Determine survival rate by class
+```
+
+    ## `summarise()` has grouped output by 'Class'. You can override using the `.groups` argument.
+
+    ## # A tibble: 8 × 5
+    ## # Groups:   Class [4]
+    ##   Class Survived survival_by_category total_passengers_by_class survival_rate
+    ##   <fct> <fct>                   <dbl>                     <dbl>         <dbl>
+    ## 1 1st   No                        122                       325          37.5
+    ## 2 1st   Yes                       203                       325          62.5
+    ## 3 2nd   No                        167                       285          58.6
+    ## 4 2nd   Yes                       118                       285          41.4
+    ## 5 3rd   No                        528                       706          74.8
+    ## 6 3rd   Yes                       178                       706          25.2
+    ## 7 Crew  No                        673                       885          76.0
+    ## 8 Crew  Yes                       212                       885          24.0
+
+1.  Out of 325 first class passengers, **203 (62%)** survived
+2.  Out of 285 second class passengers, **118 (41%)** survived
+3.  Out of 706 third class passengers, **178 (25%)** survived
+4.  Out of 885 crew members, **212 (24%)** survived.
+
+**Therefore, first class passengers had the highest survival rate.**
 
 ## 3. Data visualization (1.5pt)
 
@@ -145,12 +251,60 @@ this file into a data frame for this question.
 
 Add code to the code block below to complete these tasks.
 
+#### 3.1 Read data
+
+**First, we will read the data into R as a data frame**
+
 ``` r
-# YOUR CODE HERE
+pig_tooth_growth <- data.frame(read.table("guinea_pigs_tooth_growth.txt", header = TRUE)) # Assign the data to a variable "pig_tooth_growth"
 ```
 
-Replace this text with an explanation of your code output to answer the
-question.
+#### 3.2 Explore data
+
+**Next, we will explore the data to understand more about it**
+
+``` r
+str(pig_tooth_growth) # Provides information about the data
+```
+
+    ## 'data.frame':    60 obs. of  3 variables:
+    ##  $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
+    ##  $ supp: chr  "VC" "VC" "VC" "VC" ...
+    ##  $ dose: num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...
+
+We can see that there are *3 variables* and *60 observations* in the
+data. The `len` and `dose` variables are `numeric` while the `supp`
+variable is a `character`.
+
+#### 3.3 Determine effect of dosage and supplement type on tooth growth
+
+**Let us see if increase in dosage and supplement type (VC or OJ)
+resulted in higher length of odontoblasts(cells responsible for tooth
+growth)**
+
+*So, the length of odontoblasts translates to tooth growth*
+
+We will use a scatterplot to visualize the data
+
+``` r
+pig_tooth_growth %>% # Pipe the data into the ggplot function
+    ggplot(aes(dose, len, color = supp)) + # Map the variables to aesthetics
+    geom_jitter(width = 0.1) + # A little jitter to avoid over-plotting
+    theme_bw() + # Reduce the background
+    labs(title = "Effect of Vit. C Dosage and Source on Tooth Growth",
+          x = "Dose of Vitamin C",
+          y = "Length of odontoblasts (tooth growth)",
+          color = "Source of Vit. C") # Give informative labels to the plot
+```
+
+![](intro_assignment_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+This graph is very informative. It shows that there was increase in
+tooth growth as the dosage of vitamin C increased. It also shows that
+especially at doses 0.5 and 1.0, OJ(orange juice produced more tooth
+growth) than VC(ascorbic acid). I wonder why there was no dose at 1.5.
+The graph clearly shows that. I chose to present the data in this way
+because it gives me information on individual pigs.
 
 ## 4. Mechanics (0.5pt)
 
