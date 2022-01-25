@@ -3,7 +3,7 @@
 ## Introduction
 
 My name is **Ekpereka Amutaigwe**. I am a Master's student in the Genome Science and 
-Technology program. I'm a Nigerian female :nigeria:. I love reading :book: and singing :musical_note:
+Technology program. I'm a Nigerian female :nigeria:. I love reading :book: and singing :musical_note:.
 My LinkedIn profile can be found in this link-[Ekpereka Amutaigwe](https://www.linkedin.com/in/ekpereka-amutaigwe-1408b4128/)
 
 ### MSc Thesis project
@@ -14,7 +14,7 @@ modifications, and how these interactions influence gene expression in embryonic
 
 ### What I hope to learn in the course
 
-As RNA-Seq analysis is a major part of this course, I hope to learn how to analyze gene expression data and also carry out a differential gene expression analysis project. The statistical analysis aspect of the course is also very relevant to my project. And I hope to improve advance my knowledge of the R Language.
+As RNA-Seq analysis is a major part of this course, I hope to learn how to analyze gene expression data and also carry out a differential gene expression analysis project. The statistical analysis aspect of the course is also very relevant to my project. And I hope to improve my knowledge of the R Language.
 
 ### Purpose of the repository
 
