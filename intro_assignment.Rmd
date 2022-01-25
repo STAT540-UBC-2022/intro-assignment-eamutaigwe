@@ -60,36 +60,47 @@ Convert the array into a data frame by using `data.frame()` function.
 - How many children and adults were on Titanic? 
 - Were there more female adult or male adult passengers? 
 
-Find the answers these questions by adding code to the code block below. 
+Find the answers these questions by adding code to the code block below.     
 
-**First, we will convert the array into a data frame**
+
+#### 2.1.1 Load package and convert data to data frame  
+
+**First, we will load the required package for the functions needed and convert the array into a data frame**
 
 ```{r}
+suppressMessages(library(tidyverse)) # This package contains functions we will use to answer the questions
+
 titanic <- data.frame(Titanic)
 ```
-The data frame has `r ncol(titanic)` variables and `r nrow(titanic)` observations. 
 
+The data frame has **`r ncol(titanic)` variables** and **`r nrow(titanic)` observations**.
+
+
+#### 2.1.2 Determine number of children and adults  
 
 **Next, we will determine the number of children and adults**
+
 ```{r}
-suppressMessages(library(tidyverse)) # This package contains functions we will use to answer this question
 (child_adult <- titanic %>% # Pipe the data set into the function
   select(Age, Freq) %>% # Select the columns (variables) of interest
   group_by(Age) %>% # Group by Age
   summarize(freq = sum(Freq)))
 ```
-From the analysis, `109 children` and `2092 adults` were on the Titanic.
 
+From the analysis, **`r child_adult$freq[1]` children and `r child_adult$freq[2]` adults** were on the Titanic.
+
+----
+#### 2.1.3 Determine number of female and male adult passengers  
 
 **Let us now find out if there were more female or male adult passengers**
 
 ```{r}
-(adult_male_female <- titanic %>% # Pipe the titanic data into the function
+(adult_male_female <- titanic %>% # Pipe the titanic data into the filter function
   filter(Age == "Adult") %>% # Filter the data to only Adult passengers
   group_by(Sex) %>% # Group Adult passengers by Sex
   summarize(n = sum(Freq))) # Summarize the frequency of each group
 ```
-The analsis above shows that there were far `more male adult passengers (1667)` than `female adult passengers (425)`.
+The analysis above shows that there were far **more male adult passengers (`r adult_male_female$n[1]`)** than **female adult passengers (`r adult_male_female$n[2]`)**.
 
 
 ### 2.2 Survival 
@@ -100,35 +111,40 @@ Using the same data frame, examine the survival rates.
 - Which class of passengers have a better survival rate? (Crew, first class, second class, third class)
 
 
-Find the answers these questions by adding code to the code block below. 
+Find the answers these questions by adding code to the code block below.  
+
+
+#### 2.2.1 Compare survival rate of children to adults  
 
 **We will go ahead and find out the survival rates between children and adults to be able to answer the question**
 
 ```{r}
-(survival <- titanic %>% 
+(survival_age <- titanic %>% 
     select(Age, Survived, Freq) %>% # To answer the question, select the relevant variables
     group_by(Age, Survived) %>% # Group by Age and Survived
     summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by Age
     mutate(total_passengers_by_age = sum(survival_by_category)) %>% # Find the total under each Age group
     mutate(survival_rate = survival_by_category/total_passengers_by_age * 100)) # Determine survival rate by age
 ```
-The result shows that `57 (52%)` of the children survived whereas `654 (31%)` of the adults survived. Therefore, the children had better survival rate than adults.
+The result shows that **`r survival_age$survival_by_category[2]` (`r round(survival_age$survival_rate[2])`%)** of the children survived whereas **`r survival_age$survival_by_category[4]` (`r round(survival_age$survival_rate[4])`%)** of the adults survived. 
+**Therefore, the children had better survival rate than adults.**
 
+#### 2.2.2 Compare survival rate by class
 
 **We will now determine the class of passengers with better survival rate**
 
 ```{r}
-(survival <- titanic %>% 
+(survival_class <- titanic %>% 
     select(Class, Survived, Freq) %>% # To answer the question, select the relevant variables
     group_by(Class, Survived) %>% # Group by class and survival
     summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by class
     mutate(total_passengers_by_class = sum(survival_by_category)) %>% # Find the total under each Age group
     mutate(survival_rate = survival_by_category/total_passengers_by_class * 100)) # Determine survival rate by class
 ```
-1. Out of 325 first class passengers, 203 **(62%)** survived 
-2. Out of 285 second class passengers, 118 **(41%)** survived 
-3. Out of 706 third class passengers, 178 **(25%)** survived
-4. Out of 885 crew members, 212 **(23%)** survived.
+1. Out of 325 first class passengers, **`r survival_class$survival_by_category[2]` (`r round(survival_class$survival_rate[2])`%)** survived 
+2. Out of 285 second class passengers, **`r survival_class$survival_by_category[4]` (`r round(survival_class$survival_rate[4])`%)** survived 
+3. Out of 706 third class passengers, **`r survival_class$survival_by_category[6]` (`r round(survival_class$survival_rate[6])`%)** survived
+4. Out of 885 crew members, **`r survival_class$survival_by_category[8]` (`r round(survival_class$survival_rate[8])`%)** survived.
 
 **Therefore, first class passengers had the highest survival rate.**
 
@@ -142,6 +158,7 @@ Here you'll practice reading data from a text file and do some graphing. The fil
 
 Add code to the code block below to complete these tasks. 
 
+#### 3.1 Read data
 
 **First, we will read the data into R as a data frame**
 ```{r}
@@ -149,14 +166,18 @@ pig_tooth_growth <- data.frame(read.table("guinea_pigs_tooth_growth.txt", header
 ```
 
 
+#### 3.2 Explore data  
+
 **Next, we will explore the data to understand more about it**
 
 ```{r}
-str(pig_tooth_growth) # Provides different information about the data
+str(pig_tooth_growth) # Provides information about the data
 ```
 
-We can see that there are `r ncol(pig_tooth_growth)` and `r nrow(pig_tooth_growth)` in the data. The len and dose variables are numeric while the supp variable is a character.
+We can see that there are *`r ncol(pig_tooth_growth)` variables* and *`r nrow(pig_tooth_growth)` observations* in the data. The `len` and `dose` variables are `numeric` while the `supp` variable is a `character`.
 
+
+#### 3.3 Determine effect of dosage and supplement type on tooth growth
 
 **Let us see if increase in dosage and supplement type (VC or OJ) resulted in higher length of odontoblasts(cells responsible for tooth growth)** 
 
@@ -175,7 +196,7 @@ pig_tooth_growth %>% # Pipe the data into the ggplot function
           color = "Source of Vit. C") # Give informative labels to the plot
 ```
 
-This graph is very informative. It shows that there was an increase in tooth growth as the dosage of vitamin C increased. It also shows that especially at doses 0.5 and 1.0, OJ(orange juice produced more tooth growth) than VC(ascorbic acid). I chose to present the data in this way because it gives me information on individual pigs.
+This graph is very informative. It shows that there was increase in tooth growth as the dosage of vitamin C increased. It also shows that especially at doses 0.5 and 1.0, OJ(orange juice produced more tooth growth) than VC(ascorbic acid). I wonder why there was no dose at 1.5. The graph clearly shows that. I chose to present the data in this way because it gives me information on individual pigs.
 
 
 ## 4. Mechanics (0.5pt)
