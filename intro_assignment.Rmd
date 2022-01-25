@@ -123,7 +123,7 @@ The result shows that `57 (52%)` of the children survived whereas `654 (31%)` of
     group_by(Class, Survived) %>% # Group by class and survival
     summarize(survival_by_category = sum(Freq)) %>% # Sum up the number of survivals by class
     mutate(total_passengers_by_class = sum(survival_by_category)) %>% # Find the total under each Age group
-    mutate(survival_rate = survival_by_category/total_passengers_by_class * 100))
+    mutate(survival_rate = survival_by_category/total_passengers_by_class * 100)) # Determine survival rate by class
 ```
 1. Out of 325 first class passengers, 203 **(62%)** survived 
 2. Out of 285 second class passengers, 118 **(41%)** survived 
@@ -142,9 +142,36 @@ Here you'll practice reading data from a text file and do some graphing. The fil
 
 Add code to the code block below to complete these tasks. 
 
+
+**First, we will read the data into R as a data frame**
 ```{r}
-# YOUR CODE HERE
+pig_tooth_growth <- data.frame(read.table("guinea_pigs_tooth_growth.txt", header = TRUE)) # Assign the data to a variable "pig_tooth_growth"
 ```
+
+
+**Next, we will explore the data to understand more about it**
+
+```{r}
+str(pig_tooth_growth) # Provides different information about the data
+```
+
+We can see that there are `r ncol(pig_tooth_growth)` and `r nrow(pig_tooth_growth)` in the data. The len and dose variables are numeric while the supp variable is a character.
+
+
+**Let us see if increase in dosage and supplement type (VC or OJ) resulted in higher length of odontoblasts(cells responsible for tooth growth)** 
+*So, the length of odontoblasts translates to  tooth growth*
+
+```{r}
+pig_tooth_growth %>% 
+  ggplot(aes(dose, len, color = supp)) +
+  geom_jitter(width = 0.1) +
+  theme_bw() +
+  labs(title = "Effect of Vit. C Dosage and Source on Tooth Growth",
+  x = "Dose of Vitamin C",
+  y = "Length of odontoblasts",
+  color = "Source of Vit. C")
+```
+
 
 Replace this text with an explanation of your code output to answer the question. 
 
